@@ -1,9 +1,8 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "module": "CommonJS",
-    "moduleResolution": "node",
-    "ignoreDeprecations": "6.0",
+    "module": "Node20",
+    "moduleResolution": "Node16",
     "strict": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
@@ -11,5 +10,5 @@
     "noEmit": true,
     "types": ["node", "@playwright/test"]
   },
-  "include": ["src/**/*.ts", "config/**/*.ts", "playwright.config.ts"]
+  "include": ["src/**/*.ts", "playwright.config.ts"]
 }
