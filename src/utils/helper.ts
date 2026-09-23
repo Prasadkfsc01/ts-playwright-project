@@ -5,3 +5,6 @@ export function log(message: string) {
 export function randomEmail(email: string) {
   return `test+${Math.random().toString(16).substring(2, 15)}@example.com`;
 }
+
+export const generateUniqueEmail = (): string =>
+  `test+${Date.now()}@example.com`;

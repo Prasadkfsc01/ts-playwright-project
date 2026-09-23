@@ -4,8 +4,13 @@ yarn.lock
 
 # Environment variables
 .env
-.env.local
-.env.*.local
+.env.*
+!.env.example
+.vars
+.secrets
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
 
 # Build and dist
 dist/
@@ -26,7 +31,6 @@ coverage/
 .nyc_output/
 
 # Playwright
-test-results/
 playwright-report/
 blob-report/
 playwright/.cache/

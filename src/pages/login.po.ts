@@ -1,31 +1,38 @@
-import { Page } from "@playwright/test";
-import { BaseClass } from "./base.po";
+import { Page, Locator } from "@playwright/test";
 
 export class LoginPage {
   readonly page: Page;
-  private baseClass: BaseClass;
+  readonly usernameInput: Locator;
+  readonly passwordInput: Locator;
+  readonly loginButton: Locator;
+  readonly invalidCredentialsMessage: Locator;
+
   constructor(page: Page) {
-    this.baseClass = new BaseClass(page);
     this.page = page;
+
+    this.usernameInput = page.getByPlaceholder("Username");
+    this.passwordInput = page.getByPlaceholder("Password");
+    this.loginButton = page.getByRole("button", { name: "Login" });
+    this.invalidCredentialsMessage = page.getByText("Invalid credentials");
   }
 
-  async open() {
-    this.baseClass.openBrowser();
+  async open(): Promise<void> {
+    await this.page.goto("/");
   }
 
-  async enterUsername(username: string) {
-    await this.page.fill('[name="username"]', username);
+  async enterUsername(username: string): Promise<void> {
+    await this.usernameInput.fill(username);
   }
 
-  async enterPassword(password: string) {
-    await this.page.fill('[name="password"]', password);
+  async enterPassword(password: string): Promise<void> {
+    await this.passwordInput.fill(password);
   }
 
-  async clickLogin() {
-    await this.page.click('[type="submit"]');
+  async clickLogin(): Promise<void> {
+    await this.loginButton.click();
   }
 
-  async verifyDashboard(message: string) {
-    //message = this.page.locator('').textContent();
+  async isLoginPage(): Promise<boolean> {
+    return this.page.url().includes("login");
   }
 }
