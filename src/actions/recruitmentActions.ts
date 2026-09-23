@@ -8,10 +8,8 @@ export class RecruitmentPageActions {
     this.recruitmentPage = new RecruitmentPage(page);
   }
 
-  async searchForAccountAssistant(): Promise<void> {
+  async searchAllRecords(): Promise<void> {
     await this.recruitmentPage.openRecruitment();
-    await this.recruitmentPage.openJobTitleDropdown();
-    await this.recruitmentPage.selectAccountAssistant();
     await this.recruitmentPage.clickSearch();
   }
 }
