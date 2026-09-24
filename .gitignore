@@ -1,36 +1,38 @@
 # Dependencies
 node_modules/
-yarn.lock
 
-# Environment variables
+# Environment variables and local secrets
 .env
 .env.*
 !.env.example
 .vars
 .secrets
+
+# VS Code
 .vscode/*
 !.vscode/settings.json
 !.vscode/extensions.json
 
-# Build and dist
-dist/
-build/
-*.js
-*.js.map
-
-# IDE
-.vscode/
+# Other IDE / OS files
 .idea/
 *.swp
 *.swo
 *~
 .DS_Store
 
+# Local project notes
+project-notes.md
+
+# Build output
+dist/
+build/
+
 # Test coverage
 coverage/
 .nyc_output/
 
-# Playwright
+# Playwright generated files
+test-results/
 playwright-report/
 blob-report/
 playwright/.cache/

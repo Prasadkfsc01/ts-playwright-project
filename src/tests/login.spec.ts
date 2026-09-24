@@ -4,7 +4,7 @@ import { DashboardPage } from "../pages/dashboard.po";
 import { credentials, invalidCredentials } from "../testdata/credentials";
 
 test.describe("Login feature", () => {
-  test("@smoke @regressionshould login with valid credentials", async ({
+  test("@smoke @regression should login with valid credentials", async ({
     page,
   }) => {
     const loginActions = new LoginPageActions(page);
