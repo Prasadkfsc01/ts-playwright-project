@@ -1,0 +1,60 @@
+name: Playwright Nightly Regression
+
+on:
+  # Runs every night at 2:00 AM UTC
+  schedule:
+    - cron: "0 2 * * *"
+
+  # Allows you to run regression manually from GitHub Actions
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  regression-tests:
+    name: UI Regression Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Type check
+        run: npm run typecheck
+
+      - name: Run regression tests
+        env:
+          BASE_URL: ${{ vars.BASE_URL }}
+          TEST_USERNAME: ${{ vars.TEST_USERNAME }}
+          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+        run: npm run test:regression
+
+      - name: Upload Playwright report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v5
+        with:
+          name: playwright-regression-report
+          path: playwright-report/
+          retention-days: 30
+
+      - name: Upload test evidence
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v5
+        with:
+          name: playwright-regression-test-results
+          path: test-results/
+          retention-days: 30

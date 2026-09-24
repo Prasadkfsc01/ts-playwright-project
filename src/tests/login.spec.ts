@@ -4,7 +4,9 @@ import { DashboardPage } from "../pages/dashboard.po";
 import { credentials, invalidCredentials } from "../testdata/credentials";
 
 test.describe("Login feature", () => {
-  test("@smoke should login with valid credentials", async ({ page }) => {
+  test("@smoke @regressionshould login with valid credentials", async ({
+    page,
+  }) => {
     const loginActions = new LoginPageActions(page);
     const dashboardPage = new DashboardPage(page);
 
@@ -13,7 +15,9 @@ test.describe("Login feature", () => {
     await expect(dashboardPage.dashboardHeading).toBeVisible();
   });
 
-  test("should display an error for invalid credentials", async ({ page }) => {
+  test("@regression should display an error for invalid credentials", async ({
+    page,
+  }) => {
     const loginActions = new LoginPageActions(page);
 
     await loginActions.login(

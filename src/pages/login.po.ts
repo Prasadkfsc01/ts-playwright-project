@@ -29,7 +29,7 @@ export class LoginPage {
   }
 
   async clickLogin(): Promise<void> {
-    await this.loginButton.click();
+    await this.loginButton.click({ timeout: 20000 });
   }
 
   async isLoginPage(): Promise<boolean> {

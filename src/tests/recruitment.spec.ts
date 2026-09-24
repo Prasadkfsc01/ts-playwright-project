@@ -5,7 +5,7 @@ import { RecruitmentPage } from "../pages/recruitment.po";
 import { credentials } from "../testdata/credentials";
 
 test.describe("Recruitment feature", () => {
-  test("@smoke should display recruitment records when searching without filters", async ({
+  test("@smoke @regression should display recruitment records when searching without filters", async ({
     page,
   }) => {
     const loginActions = new LoginPageActions(page);
