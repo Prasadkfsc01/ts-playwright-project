@@ -1,138 +1,203 @@
-# Playwright Setup and Execution
+# Playwright TypeScript UI Automation Framework
 
-This repository provides a basic setup and examples for running Playwright tests using TypeScript.
+A lightweight and scalable **UI test automation framework built with Playwright and TypeScript**, using the OrangeHRM demo application. The framework follows the **Page Object Model with an Actions layer** to separate test scenarios, reusable workflows, UI interactions, test data and configuration. It supports smoke testing, environment-based configuration, secure credential handling, Playwright reporting and GitHub Actions CI execution.
 
-## Table of Contents
+## Tools & Technologies
 
-- [Prerequisites](#prerequisites)
-- [Getting Started](#getting-started)
-- [Project Structure](#project-structure)
-- [Installation](#installation)
-- [Running Tests](#running-tests)
-- [Writing Your Own Tests](#writing-your-own-tests)
-- [Custom Configuration](#custom-configuration)
-- [Troubleshooting](#troubleshooting)
-- [Contributing](#contributing)
-- [License](#license)
+- Playwright
+- TypeScript
+- Node.js
+- Page Object Model
+- Git / GitHub
+- GitHub Actions
+- Playwright HTML Reporter
+- Playwright Trace Viewer
+- VS Code
 
-## Prerequisites
+## Framework Architecture
 
-Before you begin, ensure you have met the following requirements:
-
-- Node.js and npm installed (version 14 or higher).
-
-## Getting Started
-
-1. Clone this repository to your local machine:
-
-   ```bash
-   git clone repo url
-
-   cd project folder
-   ```
-
-Project structure:
-
-```
-playwright-sep-2023-batch/
-  ├── src/
-  |   ├── tests/
-  |
-  ├── tsconfig.json
-  ├── package.json
-  ├── playwright.config.ts
-  └── README.md
-
+```text
+                    Test Scenarios
+                          |
+                          v
+                       Actions
+                          |
+                          v
+                     Page Objects
+                          |
+                          v
+                      Playwright
+                          |
+                          v
+                       Browser
+                          |
+                          v
+                     Application
 ```
 
-tests/: Contains example test files written in TypeScript.
-tsconfig.json: TypeScript configuration file.
-package.json: Node.js package configuration.
-playwright.config.ts: Playwright configuration file.
-README.md: This documentation.
+The framework separates responsibilities across the following layers:
 
-Installation
-Install the project dependencies using npm:
+- **Tests** – contain test scenarios and assertions.
+- **Actions** – contain reusable user and business workflows.
+- **Page Objects** – contain locators and page-specific interactions.
+- **Test Data** – manages reusable test inputs.
+- **Utilities** – contains generic reusable helper functions.
+- **Configuration** – controls environment settings, browser execution, reporting and test behaviour.
 
-cmmd:
+## Project Structure
 
-```
-npm install
-```
-
-Run tests in UI Mode
-Run your tests with UI Mode for a better developer experience with time travel debugging, watch mode and more.
-
-```
-npx playwright test --ui
-```
-
-Command Line
-Running all tests
-
-```
-npx playwright test
-```
-
-Running a single test file
-
-```
-npx playwright test landing-page.spec.js
-```
-
-Run a set of test files
-
-```
-npx playwright test tests/todo-page/ tests/landing-page/
-```
-
-Run files that have landing or login in the file name
-
-```
-npx playwright test landing login
-```
-
-Run the test with the title
-
-```
-npx playwright test -g "add a todo item"
-
-Running tests in headed mode
+```text
+ts-playwright-project/
+│
+├── .github/
+│   └── workflows/
+│       └── playwright.yml
+│
+├── .vscode/
+│   ├── extensions.json
+│   └── settings.json
+│
+├── src/
+│   ├── actions/
+│   │   ├── loginActions.ts
+│   │   └── recruitmentActions.ts
+│   │
+│   ├── pages/
+│   │   ├── login.po.ts
+│   │   └── recruitment.po.ts
+│   │
+│   ├── testdata/
+│   │   └── credentials.ts
+│   │
+│   ├── tests/
+│   │   ├── login.spec.ts
+│   │   └── recruitment.spec.ts
+│   │
+│   └── utils/
+│       └── helper.ts
+│
+├── .env.example
+├── .gitignore
+├── package.json
+├── package-lock.json
+├── playwright.config.ts
+├── tsconfig.json
+└── README.md
 ```
 
-npx playwright test landing-page.spec.ts --headed
+## Environment Configuration
 
-Running tests on a specific project
+Create a local `.env` file in the project root using `.env.example` as the template:
 
-```
-npx playwright test landing-page.ts --project=chromium
-
-Debugging Tests
-Since Playwright runs in Node.js, you can debug it with your debugger of choice e.g. using console.log or inside your IDE or directly in VS Code with the VS Code Extension. Playwright comes with the Playwright Inspector which allows you to step through Playwright API calls, see their debug logs and explore locators.
-
-Debugging all tests:
+```env
+BASE_URL=
+TEST_USERNAME=
+TEST_PASSWORD=
 ```
 
-npx playwright test --debug
+The `.env` file is excluded from source control.
 
-Debugging one test file:
+For GitHub Actions, non-sensitive configuration is stored using **GitHub Variables**:
 
+```text
+BASE_URL
+TEST_USERNAME
 ```
-npx playwright test example.spec.ts --debug
 
-Debugging a test from the line number where the test(.. is defined:
+Sensitive credentials are stored using **GitHub Secrets**:
+
+```text
+TEST_PASSWORD
 ```
 
-npx playwright test example.spec.ts:10 --debug
+This keeps environment-specific configuration and sensitive credentials outside the source code.
 
-Test Reports
-The HTML Reporter shows you a full report of your tests allowing you to filter the report by browsers, passed tests, failed tests, skipped tests and flaky tests. By default, the HTML report is opened automatically if some of the tests failed.
+## Installation
 
+Clone the repository and install dependencies:
+
+```bash
+git clone https://github.com/Prasadkfsc01/ts-playwright-project.git
+cd ts-playwright-project
+
+npm ci
+npx playwright install chromium
 ```
-npx playwright show-report
 
-In CI:
+## Running Tests
 
-Test pack run on commit & nightly runs and the report is uploaded as an artifact
-A link to the run is included in the email notifications
+Run the full test suite:
+
+```bash
+npm test
 ```
+
+Run smoke tests:
+
+```bash
+npm run test:smoke
+```
+
+Run tests in headed mode:
+
+```bash
+npm run test:headed
+```
+
+Run Playwright UI Mode:
+
+```bash
+npm run test:ui
+```
+
+Open the latest Playwright report:
+
+```bash
+npm run report
+```
+
+Run TypeScript validation:
+
+```bash
+npm run typecheck
+```
+
+## Reporting & Failure Evidence
+
+Playwright HTML reporting is used to provide visibility into test execution results.
+
+When a test fails, the framework can retain:
+
+- Screenshot
+- Video
+- Playwright trace
+- Error details
+- HTML report
+
+Test evidence is generated under:
+
+```text
+test-results/
+```
+
+HTML reports are generated under:
+
+```text
+playwright-report/
+```
+
+View the latest report with:
+
+```bash
+npm run report
+```
+
+## CI/CD
+
+GitHub Actions is used to automatically run the Playwright smoke test suite when changes are pushed to `main`, when pull requests target `main`, or when the workflow is triggered manually.
+
+The pipeline checks out the source code, sets up Node.js, installs project dependencies and Playwright Chromium, performs TypeScript validation, runs the `@smoke` test suite, and publishes Playwright reports and failure evidence such as screenshots, videos, traces and error details.
+
+GitHub Actions uses repository configuration for environment-specific values. `BASE_URL` and `TEST_USERNAME` are stored as GitHub Variables, while `TEST_PASSWORD` is stored securely as a GitHub Secret.
+
+This keeps environment configuration and sensitive credentials outside the source code while allowing the same test suite to run consistently in CI.
